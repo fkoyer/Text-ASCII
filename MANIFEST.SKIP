@@ -1,0 +1,10 @@
+#!include_default
+
+# Avoid archives of this distribution
+\.tar\.gz$
+
+# JetBrains IDE
+^.idea/
+
+# tools directory
+^tools/
