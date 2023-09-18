@@ -69,4 +69,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the LICENSE
 file included with this distribution for more information.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see &lt;http://www.gnu.org/licenses/>.
+along with this program.  If not, see https://www.gnu.org/licenses/.
