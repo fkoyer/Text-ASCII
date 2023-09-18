@@ -1,6 +1,21 @@
-#!include_default
+# Version control files
+^\.git/
+^\.gitignore$
 
-# Avoid archives of this distribution
+# Makemaker generated files and dirs.
+^MANIFEST\.
+^Makefile$
+^blib/
+^MakeMaker-\d
+
+# Temp, old and emacs backup files.
+~$
+\.old$
+\.bak$
+^#.*#$
+^\.#
+
+# Previous archives of this distribution
 \.tar\.gz$
 
 # JetBrains IDE
