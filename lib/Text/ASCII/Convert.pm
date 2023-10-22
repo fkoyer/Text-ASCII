@@ -5,7 +5,7 @@ use Encode qw(decode);
 use base 'Exporter';
 our @EXPORT = qw(convert_to_ascii);
 our @EXPORT_OK = qw(convert_to_ascii);
-our $VERSION = '0.20';
+our $VERSION = '0.21';
 my %char_map;
 
 =encoding utf8
@@ -85,7 +85,7 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 
 =cut
 
-INIT {
+UNITCHECK {
     # build character map from __DATA__ section
     while (<DATA>) {
         chomp;
