@@ -2,7 +2,7 @@
 use strict;
 use warnings FATAL => 'all';
 use MXG::App;
-use MXG::Service::DB;
+use MXG::DB::MySQL;
 use Pod::Usage;
 use JSON;
 use Encode;
@@ -49,7 +49,7 @@ binmode STDOUT, ":utf8";
 binmode STDERR, ":utf8";
 
 my $kernel = MXG::App->new();
-my $db = MXG::Service::DB->new(
+my $db = MXG::DB::MySQL->new(
     $kernel->config('database_host'),
     'unicode_db',
     $kernel->config('database_user'),
@@ -602,7 +602,7 @@ sub explain {
             $sel_char->execute($dcode);
             my $row = $sel_char->fetchrow_hashref;
             my $hcode = $row->{hcode};
-            # print ASCII in green, others in yellow
+            # print ASCII in green, others in red
             my $color = $dcode < 128 ? '0' : $dcode < 256 ? '33': '31';
             printf "\e[%sm%-50s U+%04X %s\e[0m\n", $color, decode_utf8($row->{description}), $dcode, hex_to_utf8re($hcode);
         }
