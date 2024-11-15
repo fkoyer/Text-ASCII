@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use strict;
-use warnings FATAL => 'all';
+use warnings;
 use MXG::App;
 use MXG::DB::MySQL;
 use Pod::Usage;
@@ -586,15 +586,10 @@ sub find_missing {
 sub explain {
     my $sel_char = $db->prepare("SELECT * FROM `chars` WHERE dcode = ?");
     foreach my $str (@ARGV) {
-        if ( $str =~ /^U\+([0-9a-f]{4,5})/i ) {
+        if ( $str =~ /^U\+([0-9a-f]{4,5})$/i ) {
             $str = chr(hex($1));
-        } elsif ( $str =~ /^(\\x[0-9a-f]{2})+/i ) {
-            my $new_str = '';
-            while ( $str =~ s/\\x([0-9a-f]{2})//i ) {
-                $new_str .= chr(hex($1));
-            }
-            $str = decode("utf8",$new_str,Encode::FB_WARN);
         } else {
+            $str =~ s/\\x\{?([0-9a-f]{2})\}?/chr(hex($1))/gei;
             $str = decode("utf8",$str,Encode::FB_WARN);
         }
         foreach my $char (split //,$str) {
@@ -602,9 +597,14 @@ sub explain {
             $sel_char->execute($dcode);
             my $row = $sel_char->fetchrow_hashref;
             my $hcode = $row->{hcode};
+            my $desc = $row->{description};
+            if ( $row->{is_printable} ) {
+                # fix description to include character
+                $desc = chr($dcode) . ' ' . substr($desc,2);
+            }
             # print ASCII in green, others in red
             my $color = $dcode < 128 ? '0' : $dcode < 256 ? '33': '31';
-            printf "\e[%sm%-50s U+%04X %s\e[0m\n", $color, decode_utf8($row->{description}), $dcode, hex_to_utf8re($hcode);
+            printf "\e[%sm%-50s U+%04X %s\e[0m\n", $color, $desc, $dcode, hex_to_utf8re($hcode);
         }
     }
 }
